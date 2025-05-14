@@ -51,6 +51,42 @@ header h1 {
   font-size: 80%;
 }
 
+.username {
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff;
+  height: 6em;
+  width: 14em;
+}
+
+.username fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  font-size: 14px;
+  border: none;
+  margin-top: 4px;
+  padding: 0;
+  width: 100%;
+}
+.username input {
+  border: none;
+  background-color: #edebeb;
+  border-radius: 5px;
+  outline: none;
+  padding: 5px 5px 5px 10px;
+}
+
+.username button {
+  background-color: #111;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  padding: 5px;
+  width: 100%;
+  margin-top: 14px;
+}
+
 .form form {
   align-items: center;
   bottom: 0;
