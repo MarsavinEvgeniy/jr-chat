@@ -17,6 +17,24 @@ header h1 {
   margin: 0;
 }
 
+.menu {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  color: #000;
+  text-align: end;
+  margin-right: 10px;
+}
+
+.menu button {
+  background: #fff;
+}
+
+.menu button:hover {
+  border: 1px solid blue;
+}
+
 .messages {
   height: 80vh;
   margin: 0 auto;
@@ -78,7 +96,7 @@ header h1 {
 }
 
 .username button {
-  background-color: #111;
+  background-color: #000;
   border: none;
   border-radius: 5px;
   color: #fff;

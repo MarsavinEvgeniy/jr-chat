@@ -208,5 +208,15 @@
     initChat();
   }
 
+  const logoutButton = document.querySelector('#logOut');
+  console.log("dsf");
+  logoutButton.addEventListener("click", function (e) {
+
+    // localStorage.clear();
+    localStorage.removeItem('username');
+    initUsernameForm();
+  });
+
   initApp();
+
 }
