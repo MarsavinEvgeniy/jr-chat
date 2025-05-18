@@ -208,6 +208,19 @@
     initChat();
   }
 
+  //бургер меню
+  const headerMenuBurger = document.querySelector(".header-menu-burger");
+  const menu = document.querySelector(".menu");
+
+  headerMenuBurger.addEventListener("click", () => {
+      if(menu.style.display === "none") {
+        menu.style.display = "flex";
+      }else {
+        menu.style.display = "none";
+      }
+  });
+
+  //разлогирование пользователя
   const logoutButton = document.querySelector('#logOut');
   console.log("dsf");
   logoutButton.addEventListener("click", function (e) {
