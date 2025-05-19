@@ -34,7 +34,7 @@ header {
 
 .menu {
   align-items: start;
-  display: flex;
+  display: none;
   background-color: #fff;
   box-shadow: 0 6px 10px rgb(210, 208, 208, 0.9);
   flex-direction: column;
