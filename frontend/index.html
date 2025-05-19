@@ -9,7 +9,15 @@
 <body>
 
 <header>
-  <h1>Online Chat</h1>
+  <div class="header-block">
+    <h1>Online Chat</h1>
+    <span class="header-menu-burger">&middot;&middot;&middot;</span>
+  </div>
+
+  <div class="menu">
+    <button disabled>Edit</button>
+    <button id="logOut">Logout</button>
+  </div>
 </header>
 
 <!--
@@ -23,7 +31,7 @@
   <form method="POST">
     <fieldset>
       <label>Username</label>
-      <input required type="text" name="username" placeholder="username" autocapitalize="off" autocomplete="off"  />
+      <input required type="text" name="username" placeholder="Value" autocapitalize="off" autocomplete="off"  />
     </fieldset>
     <button type="submit">Join</button>
   </form>
