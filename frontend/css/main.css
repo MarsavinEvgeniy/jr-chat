@@ -32,19 +32,24 @@ header {
   cursor: pointer;
 }
 
+.header-menu-burger::after {
+  content: "...";
+  color: #fff;
+}
+
 .menu {
   align-items: start;
-  display: none;
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   box-shadow: 0 6px 10px rgb(210, 208, 208, 0.9);
-  flex-direction: column;
   border-radius: 5px;
-  gap: 2px;
   color: #000;
   padding: 8px 0 8px 10px;
   text-align: end;
   margin-top: 15px;
   margin-left:87.6%;
+  visibility: hidden;
   width: 10%;
 }
 
