@@ -208,5 +208,22 @@
     initChat();
   }
 
+  //бургер меню
+  const headerMenuBurger = document.querySelector(".header-menu-burger");
+  const menu = document.querySelector(".menu");
+  headerMenuBurger.addEventListener("click", () => {
+      menu.style.visibility = menu.style.visibility === "hidden"
+        ? "visible"
+        : "hidden";
+  });
+
+  //разлогирование пользователя
+  const logoutButton = document.querySelector('#logOut');
+  logoutButton.addEventListener("click", function (e) {
+    localStorage.removeItem('username');
+    initUsernameForm();
+  });
+
   initApp();
+
 }
