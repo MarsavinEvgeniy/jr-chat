@@ -79,20 +79,20 @@
     fetch("http://localhost:4000/messages", {
       method: "GET",
     })
-      .then(function (messagesResponse) {
-        if (messagesResponse.status !== 200) {
-          throw new Error("Couldn't get messages from server");
-        }
+        .then(function (messagesResponse) {
+          if (messagesResponse.status !== 200) {
+            throw new Error("Couldn't get messages from server");
+          }
 
-        return messagesResponse.json();
-      })
-      .then(function (messagesList) {
-        renderMessages(messagesList);
+          return messagesResponse.json();
+        })
+        .then(function (messagesList) {
+          renderMessages(messagesList);
 
-        if (typeof cb === "function") {
-          cb();
-        }
-      });
+          if (typeof cb === "function") {
+            cb();
+          }
+        });
   }
 
   function scrollToBottom() {
@@ -129,18 +129,18 @@
         },
         body: JSON.stringify(messageData),
       })
-        .then(function(newMessageResponse) {
-          if (newMessageResponse.status !== 200) {
-            //
-          }
+          .then(function(newMessageResponse) {
+            if (newMessageResponse.status !== 200) {
+              //
+            }
 
-          formTextField.disabled = false;
-          formTextField.value = "";
-          formSubmitButton.disabled = false;
-          formSubmitButton.textContent = "Отправить";
+            formTextField.disabled = false;
+            formTextField.value = "";
+            formSubmitButton.disabled = false;
+            formSubmitButton.textContent = "Отправить";
 
-          getMessages(scrollToBottom);
-        });
+            getMessages(scrollToBottom);
+          });
     }
   }
 
@@ -190,21 +190,22 @@
           "username": enteredUsername,
         }),
       })
-        .then(function(authResponse) {
-          if (authResponse.status !== 200) {
-            //
-          }
+          .then(function(authResponse) {
+            if (authResponse.status !== 200) {
+              //
+            }
 
-          return authResponse.json();
-        })
-        .then(function() {
-          localStorage.setItem(USERNAME_REC, enteredUsername);
+            return authResponse.json();
+          })
+          .then(function(authResponseData) {
+            localStorage.setItem(USERNAME_REC, authResponseData.user_id);
+            username = enteredUsername;
 
-          usernameContainer.close();
-          usernameForm.onsubmit = null;
+            usernameContainer.close();
+            usernameForm.onsubmit = null;
 
-          initApp();
-        });
+            initApp();
+          });
     };
 
     usernameContainer.showModal();
@@ -216,7 +217,6 @@
   // - есть username — режим чата
   // - нет username — режим ввода username
   function initApp() {
-    username = localStorage.getItem(USERNAME_REC);
 
     if (username === null) {
       initUsernameForm();
