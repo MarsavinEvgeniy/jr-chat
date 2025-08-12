@@ -50,6 +50,7 @@
   const USERNAME_REC = "username";
 
   let username = null;
+  let name = null;
 
   const chatContainer = document.querySelector(".messages");
   const usernameContainer = document.querySelector(".username");
@@ -60,7 +61,7 @@
     for (const message of messages) {
       const messageElement = document.createElement("article");
       messageElement.className = "message";
-      messageElement.classList.toggle("message-mine", username === message.username);
+      messageElement.classList.toggle("message-mine", name === message.username);
 
       messageElement.innerHTML = `
         <div class="message-header">
@@ -199,8 +200,7 @@
           })
           .then(function(authResponseData) {
             localStorage.setItem(USERNAME_REC, authResponseData.user_id);
-            username = enteredUsername;
-
+            name = enteredUsername;
             usernameContainer.close();
             usernameForm.onsubmit = null;
 
@@ -217,7 +217,7 @@
   // - есть username — режим чата
   // - нет username — режим ввода username
   function initApp() {
-
+    username = localStorage.getItem(USERNAME_REC);
     if (username === null) {
       initUsernameForm();
       return;
