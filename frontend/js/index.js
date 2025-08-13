@@ -4,11 +4,11 @@
  *   должен понимать что происходит с интерфейсомы
  *   - Можно ли писать текст сообщения?
  *   - Валидно ли сообщение, которое он отправляет и можно ли его отправить?
- *   - После отправки 
+ *   - После отправки
  *    - началась ли отправка?
  *    - пришло ли сообщение на сервер? удачно ли?
  *    - [отображение сообщения в списке]
- * 
+ *
  * 1. Я нажал на кнопку отправить
  * 2. На сервер ушел POST-запрос
  * 3. Сервер обработал этот запрос
@@ -16,11 +16,11 @@
  * 5. Я обработал ответ, понял есть ли ошибка
  * 6. Если нет ошибки — показал это
  * 6.1 Если есть ошибка — показал это
- * 
+ *
  * Хорошо бы дать возможность пользователю не отправлять одно и то же сообщение
  * несколько раз
- * 
- * Способы обратной связи 
+ *
+ * Способы обратной связи
  * 1. Ничего не делать
  * 2. Все заблокировать
  *   1. Заблокировать поле ввода и кнопку и поменять текст на кнопке
@@ -30,18 +30,18 @@
  *   1. Мгновенно обновляет список сообщений и показывает наше сообщение в списке
  *      Очищает форму и дает возможность отправить новое сообщение
  *      Вновь созданному сообщению добавляет визуальный индикатор о его состоянии
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  * Ввод имени пользователя
  * - [x] изначально имя пользователя не задано - null
- * 
+ *
  * - [x] если имени пользователя нет — показываем соответствующий экран
  * - [ ] при вводе имя сохраняется в localStorage
  * - [ ] введенное имя отправляется в каждом сообщении
- * 
- * - при рендеринге списка сообщений, если имя пользователя совпадает с 
+ *
+ * - при рендеринге списка сообщений, если имя пользователя совпадает с
  *   введенным именем, это сообщение показывается справа
  */
 
@@ -50,6 +50,7 @@
   const USERNAME_REC = "username";
 
   let username = null;
+  let name = null;
 
   const chatContainer = document.querySelector(".messages");
   const usernameContainer = document.querySelector(".username");
@@ -60,11 +61,11 @@
     for (const message of messages) {
       const messageElement = document.createElement("article");
       messageElement.className = "message";
-      messageElement.classList.toggle("message-mine", username === message.username);
+      messageElement.classList.toggle("message-mine", name === message.username);
 
       messageElement.innerHTML = `
         <div class="message-header">
-          <div class="message-author">${message.username}</div>
+          <div class="message-author">${message.username ?? `<span class="message-author-deleted">✖️ Пользователь удален</span>`}</div>
           <button class="message-control"></button>
         </div>
         <p class="message-text">${message.text}</p>
@@ -79,20 +80,20 @@
     fetch("http://localhost:4000/messages", {
       method: "GET",
     })
-      .then(function (messagesResponse) {
-        if (messagesResponse.status !== 200) {
-          throw new Error("Couldn't get messages from server");
-        }
+        .then(function (messagesResponse) {
+          if (messagesResponse.status !== 200) {
+            throw new Error("Couldn't get messages from server");
+          }
 
-        return messagesResponse.json();
-      })
-      .then(function (messagesList) {
-        renderMessages(messagesList);
+          return messagesResponse.json();
+        })
+        .then(function (messagesList) {
+          renderMessages(messagesList);
 
-        if (typeof cb === "function") {
-          cb();
-        }
-      });
+          if (typeof cb === "function") {
+            cb();
+          }
+        });
   }
 
   function scrollToBottom() {
@@ -114,7 +115,7 @@
       const formData = new FormData(evt.target);
 
       const messageData = {
-        username: formData.get("username"),
+        user_id: formData.get("username"),
         text: formData.get("text"),
       };
 
@@ -129,18 +130,18 @@
         },
         body: JSON.stringify(messageData),
       })
-        .then(function(newMessageResponse) {
-          if (newMessageResponse.status !== 200) {
-            //
-          }
+          .then(function(newMessageResponse) {
+            if (newMessageResponse.status !== 200) {
+              //
+            }
 
-          formTextField.disabled = false;
-          formTextField.value = "";
-          formSubmitButton.disabled = false;
-          formSubmitButton.textContent = "Отправить";
+            formTextField.disabled = false;
+            formTextField.value = "";
+            formSubmitButton.disabled = false;
+            formSubmitButton.textContent = "Отправить";
 
-          getMessages(scrollToBottom);
-        });
+            getMessages(scrollToBottom);
+          });
     }
   }
 
@@ -166,7 +167,7 @@
 
   // Форма может жить в двух состояниях — модальное окно показано и модальное окно
   // не показано
-  // Режим когда окно не показано может быть инициализирован после того как 
+  // Режим когда окно не показано может быть инициализирован после того как
   // имя пользователя было введено
   // При создании функционала некоего модуля, который описывает работу
   // с DOM, нужно описывать не только инициализацию, но и "разрушение"
@@ -181,12 +182,30 @@
       const formData = new FormData(formElement);
       const enteredUsername = formData.get("username");
 
-      localStorage.setItem(USERNAME_REC, enteredUsername);
+      fetch("http://localhost:4000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          "username": enteredUsername,
+        }),
+      })
+          .then(function(authResponse) {
+            if (authResponse.status !== 200) {
+              //
+            }
 
-      usernameContainer.close();
-      usernameForm.onsubmit = null;
+            return authResponse.json();
+          })
+          .then(function(authResponseData) {
+            localStorage.setItem(USERNAME_REC, authResponseData.user_id);
 
-      initApp();
+            usernameContainer.close();
+            usernameForm.onsubmit = null;
+
+            initApp();
+          });
     };
 
     usernameContainer.showModal();
@@ -200,6 +219,17 @@
   function initApp() {
     username = localStorage.getItem(USERNAME_REC);
 
+    fetch(`http://localhost:4000/users/${username}`, {
+      method: "GET",
+    })
+        .then(async function (userResponse) {
+          if (userResponse.status !== 200) {
+            throw new Error("User not found");
+          }
+          const data =  await userResponse.json();
+          name = (data.username);
+        });
+
     if (username === null) {
       initUsernameForm();
       return;
@@ -212,7 +242,7 @@
   const headerMenuBurger = document.querySelector(".header-menu-burger");
   const menu = document.querySelector(".menu");
   headerMenuBurger.addEventListener("click", () => {
-      menu.style.visibility = menu.style.visibility === "hidden"
+    menu.style.visibility = menu.style.visibility === "hidden"
         ? "visible"
         : "hidden";
   });
@@ -221,9 +251,9 @@
   const logoutButton = document.querySelector('#logOut');
   logoutButton.addEventListener("click", function (e) {
     localStorage.removeItem('username');
+    menu.style.visibility =  "hidden";
     initUsernameForm();
   });
 
   initApp();
-
 }
