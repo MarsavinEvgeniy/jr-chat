@@ -63,6 +63,16 @@ async function initServer() {
     res.status(200).send(usersResponse);
   });
 
+  server.get("/users/:id", async function (req: Request, res: Response) {
+    const userId = parseInt(req.params.id);
+    const user = await pgClient.query(`SELECT username FROM users WHERE user_id = ${userId}`);
+
+    res.json({
+      username: user.rows[0].username as User
+    });
+    // res.status(200).send(user.rows[0].username as User);
+  });
+
   server.post("/users", async function (req: Request, res: Response) {
     const { username } = req.body;
     const user = await getUserByName(username);

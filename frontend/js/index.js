@@ -200,7 +200,7 @@
           })
           .then(function(authResponseData) {
             localStorage.setItem(USERNAME_REC, authResponseData.user_id);
-            name = enteredUsername;
+
             usernameContainer.close();
             usernameForm.onsubmit = null;
 
@@ -218,6 +218,18 @@
   // - нет username — режим ввода username
   function initApp() {
     username = localStorage.getItem(USERNAME_REC);
+
+    fetch(`http://localhost:4000/users/${username}`, {
+      method: "GET",
+    })
+        .then(async function (userResponse) {
+          if (userResponse.status !== 200) {
+            throw new Error("User not found");
+          }
+          const data =  await userResponse.json();
+          name = (data.username);
+        });
+
     if (username === null) {
       initUsernameForm();
       return;
